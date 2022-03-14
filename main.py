@@ -151,8 +151,6 @@ def deal(datax):
             query = datax.get('query', '')
             open_mic = True
             is_session_end = False
-            tts_word = '对不起, 暂时不支持{}这种操作'.format(query)
-
             if datax["request"]["intent"]["is_direct_wakeup"] == True:
                 open_mic = False
                 is_session_end = True
@@ -167,8 +165,6 @@ def deal(datax):
                         tts_word = get_tts_text_by_setstate(item[1], "cover", "set_cover_position", '打开' + kw, item[0],
                                                             position=50)
                         break
-                    tts_word = '还不会处理这个请求'
-                    break
 
                 # match cover open
                 find, kw = has_any(query, cmd_words_cover_open)
@@ -236,9 +232,6 @@ def deal(datax):
                         tts_word = '已经关闭了'
                     else:
                         tts_word = get_tts_text_by_setstate(item[1], "homeassistant", "turn_off", kw, item[0])
-                    break
-                elif find:
-                    tts_word = '对不起,您想要关闭的神器不存在'
                     break
 
                 # query read-only variables
