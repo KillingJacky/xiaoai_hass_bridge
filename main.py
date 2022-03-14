@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 
 import json
+import os
+import shutil
+from threading import Thread
 
 import requests
-import shutil
 from flask import Flask
 from flask import request, Response
-from requests.exceptions import ReadTimeout, ConnectionError, RequestException
 from homeassistant_api import Client
+from requests.exceptions import ReadTimeout, ConnectionError, RequestException
 
 try:
-    from config import *
+    from config.config import *
 except Exception as ignore:
     print(f"请先配置config.py文件")
-    shutil.copy("config.default.py", "config.py")
+    os.makedirs("config", exist_ok=True)
+    shutil.copy("config.default.py", "config/config.py")
     exit(0)
 
 
@@ -89,7 +92,10 @@ def conversation(text, **kwargs):
     try:
         response = requests.post(url, headers=headers,
                                  data=postdata, timeout=1)
-        response_result = "搞定啦"
+        if response.status_code == 200:
+            response_result = "搞定啦"
+        else:
+            response_result = response.reason
         app.logger.debug('setstate url: {}, data: {}, result: {}'.format(url, postdata, response_result))
     except ReadTimeout:
         response_result = "语音助手正在处理中哦"
@@ -250,7 +256,13 @@ def deal(datax):
                     break
 
                 # ha语音助手处理其他情况
-                tts_word = conversation(query)
+                thread = Thread(target=conversation, args=(query,))
+                thread.start()
+                thread.join(1.0)
+                if thread.is_alive():
+                    tts_word = "后台执行中"
+                else:
+                    tts_word = "完成啦"
                 break  # break the while True
 
     say_text = {'version': '1.0', 'session_attributes': {'sessi_id': '12345'},

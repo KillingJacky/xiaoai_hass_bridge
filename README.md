@@ -3,12 +3,17 @@
 这是一个小米水滴平台的技能, 用于将小爱同学与 Home Assistant 系统桥接起来.
 (A Shuidi Skill for bridging Xiaoai and Home Assistant)
 
-# v2.0更新
-###(1)无法处理的情况交给ha语音助手处理
-#### 语音助手可支持中文控制
-#### 语音助手添加参考 [shaonianzhentan/conversation](https://github.com/shaonianzhentan/conversation)
+v2.0
+=============
++ 无法处理的情况交给ha语音助手处理
+  + 语音助手可支持中文控制
+  + 语音助手添加参考: [conversation](https://github.com/shaonianzhentan/conversation)
 
-(2)查询实体不需要配置，自动拉取ha所有实体
++ 查询实体不需要配置，自动拉取ha所有实体
++ docker镜像
+
+  + docker run --restart always --name miai-ha-bridge -v /data/flask-tool/config:/app/config alanwoods/flask-mi-homeassistant
+
 
 ## 词汇
 
