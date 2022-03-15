@@ -126,35 +126,25 @@ def get_tts_text_by_setstate(entity_id, domain, service, action_name, entity_nam
         return '与控制中心' + call_result
 
 
-tts_word = ""
-open_mic = True
-is_session_end = False
-
-
 def deal(datax):
+    open_mic = True
+    is_session_end = False
     app.logger.debug(datax)
-    if datax["request"]["type"] == 0:
-        open_mic = True
-        is_session_end = False
+    if datax["request"]["type"] == 0 and not datax.get('request', {}).get('intent', {}).get('is_direct_wakeup'):
         tts_word = "您好，我能为你做什么呢？"
     elif datax["request"]["type"] == 2:
         open_mic = False
         is_session_end = True
         tts_word = "再见，我在这里等你哦!"
-    elif datax["request"]["type"] == 1:
+    else:
         # user hasn't action for a while
         if 'no_response' in datax["request"]:
-            open_mic = True
-            is_session_end = False
             tts_word = '主人，您还在吗？'
         else:
             query = datax.get('query', '')
-            open_mic = True
-            is_session_end = False
-            if datax["request"]["intent"]["is_direct_wakeup"] == True:
+            if datax["request"]["intent"]["is_direct_wakeup"]:
                 open_mic = False
                 is_session_end = True
-
             while True:
                 # match cover setpos
                 find, kw = has_any(query, cmd_words_cover_setpos)
