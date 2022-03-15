@@ -3,6 +3,18 @@
 这是一个小米水滴平台的技能, 用于将小爱同学与 Home Assistant 系统桥接起来.
 (A Shuidi Skill for bridging Xiaoai and Home Assistant)
 
+v2.0
+=============
++ 无法处理的情况交给ha语音助手处理
+  + 语音助手可支持中文控制
+  + 语音助手添加参考: [conversation](https://github.com/shaonianzhentan/conversation)
+
++ 查询实体不需要配置，自动拉取ha所有实体
++ docker镜像
+
+  + docker run --restart always --name miai-ha-bridge -v /data/flask-tool/config:/app/config alanwoods/flask-mi-homeassistant
+
+
 ## 词汇
 
 - 技能名称, 即在水滴平台中给技能定义的名称, 本文档后文中将记作 AA
@@ -47,11 +59,7 @@
 - Tips:
   - 如果已经做好了到家里宽带的 DDNS, 可将此脚本直接跑在运行 Home Assistant 的主机上, 例如树莓派/NAS
   - SSL/HTTPS 是必须, 安装过程自行搜索
-
-## 配置
-
-- 将 config.default.py 改名为 config.py
-- 按自己的情况修改里面的配置项
+  
 
 ## 感谢
 - syjjx @ bbs.hassbian.com
